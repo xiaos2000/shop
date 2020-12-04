@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.xm.mapper.UserMapper">
+
+
+    <insert id="addregister" >
+
+    INSERT INTO tab_user(
+    username,
+    PASSWORD,
+    NAME,
+    birthday,
+    sex,
+    telephone,
+    email,
+        STATUS,
+        CODE
+
+        )
+    VALUES (
+    #{username},
+    #{PASSWORD},
+    #{NAME},
+    #{birthday},
+    #{sex},
+    #{telephone},
+    #{email},
+        #{STATUS},
+        #{CODE}
+    )
+
+    <selectKey resultType="int" keyProperty="uid" order="AFTER">
+        SELECT  @@IDENTITY
+    </selectKey>
+    </insert>
+   <!--根据激活码查询用户-->
+    <select id="finByCode" resultType="user">
+    SELECT
+
+     uid,
+     username,
+    PASSWORD,
+    NAME,
+    birthday,
+    sex,
+    telephone,
+    email,
+     STATUS,
+     CODE
+     FROM
+    tab_user
+    where CODE=#{CODE}
+    </select>
+    <!--激活用户-->
+    <update id="updateStatus" >
+    UPDATE tab_user SET STATUS = #{STATUS} WHERE uid = #{uid}
+    </update>
+
+    <select id="log" resultType="user">
+        SELECT
+
+        uid,
+        username,
+        PASSWORD,
+        NAME,
+        birthday,
+        sex,
+        telephone,
+        email,
+        STATUS,
+        CODE
+        FROM
+        tab_user
+        where username=#{username} AND  PASSWORD=#{PASSWORD}
+    </select>
+
+</mapper>

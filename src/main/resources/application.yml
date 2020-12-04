@@ -1,0 +1,8 @@
+redis:
+  host: localhost
+  port: 6379
+  max-wait: 30000 #连接池最大堵塞等待时间（使用负数表示没有限制）
+  max-active: 100 # 链接池最大链接（使用负数表示没有限制）
+  max-idle: 20 #链接池中最大空闲链接
+  min-idle: 0 #链接池中最小空闲链接
+  timeout: 3000 #链接超时

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.xm.mapper.RouteMapper">
+
+<select id="finByPage" resultType="route">
+
+
+  SELECT*FROM tab_route
+  WHERE 1=1
+  <if test=" rname!='-1' ">
+    AND   rname LIKE '%' #{rname}  '%'
+  </if>
+     AND cid=#{cid} LIMIT #{currentPage},#{pageSize}
+
+</select>
+<!--currentPage 从哪开始 pageSize查询都是条-->
+<select id="finTotalCount" resultType="int">
+  SELECT COUNT( * ) FROM tab_route
+  WHERE 1=1
+  <if test=" rname!='-1' ">
+    AND   rname LIKE '%' #{rname}  '%'
+  </if>
+   AND cid=#{cid};
+</select>
+
+
+    <resultMap id="routeImgSeller" type="route">
+      <id column="rid" property="rid" />
+      <result column="rname" property="rname"/>
+      <result column="price" property="price"/>
+      <result column="routeIntroduce" property="routeIntroduce"/>
+      <result column="rflag" property="rflag"/>
+      <result column="rdate" property="rdate"/>
+      <result column="isThemeTour" property="isThemeTour"/>
+      <result column="COUNT" property="count"/>
+      <result column="cid" property="cid"/>
+      <result column="rimage" property="rimage"/>
+      <result column="sid" property="sid"/>
+      <result column="sourceId" property="sourceId"/>
+      <collection property="routeImgList" ofType="RouteImg">
+        <id column="rgid" property="rgid" />
+        <result column="rid" property="rid"/>
+        <result column="bigPic" property="bigPic"/>
+        <result column="smallPic" property="smallPic"/>
+      </collection>
+      <collection property="seller" ofType="Seller">
+        <id column="sid" property="sid" />
+        <result column="sname" property="sname"/>
+        <result column="consphone" property="consphone"/>
+        <result column="address" property="address"/>
+      </collection>
+    </resultMap>
+  <select id="particulars" resultType="route" resultMap="routeImgSeller">
+    SELECT*FROM tab_route r ,tab_route_img img , tab_seller s WHERE r.rid=img.rid AND r.sid=s.sid AND r.rid=#{rid}
+  </select>
+
+  <select id="isFavorite" resultType="favorite">
+  SELECT*FROM tab_favorite WHERE rid=#{rid} AND  uid=#{uid};
+  </select>
+
+  <select id="findCountByRid" resultType="int">
+SELECT COUNT( * ) FROM tab_favorite WHERE rid=#{rid}
+  </select>
+</mapper>
